@@ -21,9 +21,9 @@ void add_circle( struct matrix * points,
 		 double r, double step ) {
   printf("drawing circle\n");
   double i = 0;
-  double x = 0;
-  double y = 0;
-  while( i < (1 - 0.0001)){
+  double x = ( r * cos(0 * 2 * M_PI) + cx);;
+  double y = (r * sin(0 * 2 * M_PI) + cy);
+  while( i < (1 + 0.0001)){
     double x1 = ( r * cos(i * 2 * M_PI) + cx);
     double y1 = (r * sin(i * 2 * M_PI) + cy);
     add_edge(points,x,y,cz,x1,y1,cz);
@@ -50,18 +50,27 @@ Adds the curve bounded by the 4 points passsed as parameters
 of type specified in type (see matrix.h for curve type constants)
 to the matrix points
 ====================*/
+
 void add_curve( struct matrix *points, 
 		double x0, double y0, 
 		double x1, double y1, 
 		double x2, double y2, 
 		double x3, double y3, 
 		double step, int type ) {
-   double i = 0;
+  printf("adding curve\n");
+  double i = 0;
   double x = 0;
   double y = 0;
-  while( i < (1 - 0.0001)){
-    struct matrix *xcof = generate_curve_coefs(x0,x1,x2,x3,type);
-    struct matrix *ycof = generate_curve_coefs(y0,y1,y2,y3,type);
+  struct matrix *q = new_matrix(4,4);
+  struct matrix *ycof = generate_curve_coefs(q,y0,y1,y2,y3,type);
+  printf("y coeffecients are\n");
+  print_matrix(ycof);
+  free(q); q = new_matrix(4,4);
+  struct matrix *xcof =  generate_curve_coefs(q,x0,x1,x2,x3,type);
+  printf("x coeffecients are\n");
+  print_matrix(xcof);
+  while( i < (1 + 0.0001)){
+    
     double ax = (xcof->m[0][0]);
     double bx = (xcof->m[0][1]);
     double cx = (xcof->m[0][2]);
@@ -72,7 +81,6 @@ void add_curve( struct matrix *points,
     double cy = (ycof->m[0][2]);
     double dy = (ycof->m[0][3]);
     double y1 = (ay * (i * i * i)) + (by * (i * i)) + (cy * i) + dy;
-    
     add_edge(points,x,y,0,x1,y1,0);
     x = x1; y = y1;
     i += step;

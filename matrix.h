@@ -13,7 +13,7 @@ struct matrix {
 //curve routines
 struct matrix * make_bezier();
 struct matrix * make_hermite();
-struct matrix * generate_curve_coefs( double p0, double p1,
+struct matrix * generate_curve_coefs( struct matrix *q, double p0, double p1,
 				      double p2, double p3, int type );
 
 //transformation routines

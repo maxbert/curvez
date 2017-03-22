@@ -11,13 +11,14 @@
   ====================*/
 struct matrix * make_bezier() {
   struct matrix *t = new_matrix(4,4);
+  ident(t);
   t->m[0][0] = -1;
   t->m[1][0] = 3;
   t->m[2][0] = -3;
   t->m[3][0] = 1;
   t->m[0][1] = 3;
   t->m[1][1] = -6;
-  t->m[2][1] = -3;
+  t->m[2][1] = 3;
   t->m[3][1] = 0;
   t->m[0][2] = -3;
   t->m[1][2] = 3;
@@ -40,6 +41,7 @@ struct matrix * make_bezier() {
   ====================*/
 struct matrix * make_hermite() {
   struct matrix *t = new_matrix(4,4);
+  ident(t);
   t->m[0][0] = 2;
   t->m[1][0] = -2;
   t->m[2][0] = 1;
@@ -74,20 +76,23 @@ struct matrix * make_hermite() {
   
   Type determines whether the curve is bezier or hermite
   ====================*/
-struct matrix * generate_curve_coefs( double p1, double p2, 
+struct matrix * generate_curve_coefs( struct matrix *q, double p1, double p2, 
 				      double p3, double p4, int type) {
   struct matrix *t = new_matrix(4,1);
+  ident(t);
   t->m[0][0] = p1;
   t->m[0][1] = p2;
   t->m[0][2] = p3;
   t->m[0][3] = p4;
-  struct matrix *q = new_matrix(4,4);
   if(!type){
     q = make_hermite();
   }else{
     q = make_bezier();
   }
   matrix_mult(q,t);
+  printf("good cofs genreated\n");
+  print_matrix(t);
+  free_matrix(q);
   return t;
 }
 
