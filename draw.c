@@ -61,25 +61,25 @@ void add_curve( struct matrix *points,
   double i = 0;
   double x = 0;
   double y = 0;
-  struct matrix *q = new_matrix(4,4);
+  struct matrix *q = new_matrix(4,1);
   struct matrix *ycof = generate_curve_coefs(q,y0,y1,y2,y3,type);
   printf("y coeffecients are\n");
   print_matrix(ycof);
-  free(q); q = new_matrix(4,4);
+  free(q); q = new_matrix(4,1);
   struct matrix *xcof =  generate_curve_coefs(q,x0,x1,x2,x3,type);
   printf("x coeffecients are\n");
   print_matrix(xcof);
   while( i < (1 + 0.0001)){
     
     double ax = (xcof->m[0][0]);
-    double bx = (xcof->m[0][1]);
-    double cx = (xcof->m[0][2]);
-    double dx = (xcof->m[0][3]);
+    double bx = (xcof->m[1][0]);
+    double cx = (xcof->m[2][0]);
+    double dx = (xcof->m[3][0]);
     double x1 = (ax * (i * i * i)) + (bx * (i * i)) + (cx * i) + dx;
     double ay = (ycof->m[0][0]);
-    double by = (ycof->m[0][1]);
-    double cy = (ycof->m[0][2]);
-    double dy = (ycof->m[0][3]);
+    double by = (ycof->m[1][0]);
+    double cy = (ycof->m[2][0]);
+    double dy = (ycof->m[3][0]);
     double y1 = (ay * (i * i * i)) + (by * (i * i)) + (cy * i) + dy;
     add_edge(points,x,y,0,x1,y1,0);
     x = x1; y = y1;
