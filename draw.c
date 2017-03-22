@@ -5,7 +5,7 @@
 #include "display.h"
 #include "draw.h"
 #include "matrix.h"
-
+#include <math.h>
 /*======== void add_circle() ==========
   Inputs:   struct matrix * points
             double cx
@@ -19,6 +19,17 @@
 void add_circle( struct matrix * points, 
 		 double cx, double cy, double cz,
 		 double r, double step ) {
+  printf("drawing circle\n");
+  double i = 0;
+  double x = 0;
+  double y = 0;
+  while( i < (1 - 0.0001)){
+    double x1 = ( r * cos(i * 2 * M_PI) + cx);
+    double y1 = (r * sin(i * 2 * M_PI) + cy);
+    add_edge(points,x,y,cz,x1,y1,cz);
+    x = x1; y = y1;
+    i += step;
+  };
 }
 
 /*======== void add_curve() ==========
@@ -45,7 +56,29 @@ void add_curve( struct matrix *points,
 		double x2, double y2, 
 		double x3, double y3, 
 		double step, int type ) {
+   double i = 0;
+  double x = 0;
+  double y = 0;
+  while( i < (1 - 0.0001)){
+    struct matrix *xcof = generate_curve_coefs(x0,x1,x2,x3,type);
+    struct matrix *ycof = generate_curve_coefs(y0,y1,y2,y3,type);
+    double ax = (xcof->m[0][0]);
+    double bx = (xcof->m[0][1]);
+    double cx = (xcof->m[0][2]);
+    double dx = (xcof->m[0][3]);
+    double x1 = (ax * (i * i * i)) + (bx * (i * i)) + (cx * i) + dx;
+    double ay = (ycof->m[0][0]);
+    double by = (ycof->m[0][1]);
+    double cy = (ycof->m[0][2]);
+    double dy = (ycof->m[0][3]);
+    double y1 = (ay * (i * i * i)) + (by * (i * i)) + (cy * i) + dy;
+    
+    add_edge(points,x,y,0,x1,y1,0);
+    x = x1; y = y1;
+    i += step;
+  }
 }
+
 
 
 /*======== void add_point() ==========
